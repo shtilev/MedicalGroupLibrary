@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Уніфіковані назви</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <header>
+        <h1>Уніфіковані назви аналізів</h1>
+        <p align="center"><a href="/"><img src="/static/back.png" width="3%"><br>Назад</a></p>
+    <!-- Форма для додавання -->
+        <h2>Додати нову уніфіковану назву</h2>
+        <form action="/add" method="post">
+            <input type="text" name="standard_name" placeholder="Уніфіковане ім'я" required>
+            <input type="text" name="synonym" placeholder="Синонім" required>
+            <button type="submit">Додати</button>
+        </form>
+    </header>
+    <main>
+        <section>
+            <h2>Оберіть уніфіковане ім'я</h2>
+            <div class="synonyms-container">
+                {% for name in standard_names %}
+                <a href="/synonyms/{{ name }}" class="synonyms-btn">{{ name }}</a>
+                {% endfor %}
+            </div>
+        </section>
+    </main>
+</body>
+</html>

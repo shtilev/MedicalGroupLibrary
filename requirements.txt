@@ -1,0 +1,10 @@
+rapidfuzz
+sqlalchemy
+fastapi
+uvicorn[standard]
+pydantic
+openai
+tqdm
+jinja2
+python-multipart
+python-dotenv

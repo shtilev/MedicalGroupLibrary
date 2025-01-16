@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Генератор синонімів</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <header>
+        <h1>Генерація синонімів</h1>
+        <p align="center"><a href="/"><img src="/static/back.png" width="3%"><br>Назад</a></p>
+    </header>
+    <main>
+        <section>
+            <form method="post" action="/generate_synonyms">
+    <label for="standard_name">Виберіть стандартне ім'я:</label>
+    <select id="standard_name" name="standard_name">
+        {% for name in unified_names %}
+            <option value="{{ name }}">{{ name }}</option>
+        {% endfor %}
+    </select>
+    <br>
+    <label for="request_count">Кількість запитів:</label>
+    <input type="number" id="request_count" name="request_count" min="1" value="1">
+                <button type="submit">Генерувати синоніми</button>
+</form>
+
+        </section>
+
+        {% if message %}
+            <p align="center">{{ message }}</p>
+        {% endif %}
+
+    </main>
+</body>
+</html>

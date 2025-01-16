@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Імпорт / Експорт Синонімів</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <header>
+        <h1>Імпортувати / Експортувати синоніми</h1>
+        <p align="center"><a href="/"><img src="/static/back.png" width="3%"><br>Назад</a></p>
+    </header>
+    <main>
+        <section>
+            <h2>Імпорт синонімів</h2>
+            <form action="/import" method="post" enctype="multipart/form-data">
+                <label for="file">Виберіть JSON файл для імпорту:</label><br>
+                <input type="file" name="file" required><br>
+
+                <label for="standard_name">Виберіть уніфіковане ім'я (необов'язково):</label><br>
+                <select name="standard_name">
+                    <option value="">Всі уніфіковані назви</option>
+                    {% for name in standard_names %}
+                    <option value="{{ name.name }}">{{ name.name }}</option>
+                    {% endfor %}
+                </select><br>
+
+                <button type="submit">Імпортувати</button>
+            </form>
+        </section>
+
+        <section>
+            <h2>Експорт синонімів</h2>
+            <form action="/export" method="get">
+                <label for="standard_name">Виберіть уніфіковане ім'я (необов'язково):</label><br>
+                <select name="standard_name">
+                    <option value="">Всі уніфіковані назви</option>
+                    {% for name in standard_names %}
+                    <option value="{{ name.name }}">{{ name.name }}</option>
+                    {% endfor %}
+                </select><br>
+                <button type="submit">Експортувати синоніми в JSON</button>
+            </form>
+        </section>
+
+        {% if message %}
+            <div style="color: green;">{{ message }}</div>
+        {% endif %}
+    </main>
+</body>
+</html>
