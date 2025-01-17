@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Юніти для {{ standard_name.name }}</title>
+            <link rel="stylesheet" href="/static/styles.css">
+
+</head>
+<body>
+    <h1>Юніти для "{{ standard_name.name }}"</h1>
+        <p align="center">
+        <a href="/units"><img src="/static/back.png" width="3%"><br>Назад</a>
+    </p>
+
+    <p align="center">
+    <a href="/add_unit/{{ standard_name.id }}">Додати новий юніт</a>
+</p>
+<table border="1">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Одиниця вимірювання</th>
+            <th>Стандартна одиниця</th>
+            <th>Дії</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for unit in units %}
+            <tr>
+                <td>{{ unit.id }}</td>
+                <td>{{ unit.unit }}</td>
+                <td>{% if unit.is_standard %} Так {% else %} Ні {% endif %}</td>
+                <td>
+                    <form method="post" action="/delete_unit/{{ unit.id }}" class="form-delete" style="display: inline;">
+                        <button type="submit" class="btn-delete">Видалити</button>
+                    </form>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4">Немає юнітів для відображення.</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+</body>
+</html>

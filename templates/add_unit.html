@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Додати юніт</title>
+        <link rel="stylesheet" href="/static/styles.css">
+
+</head>
+<body>
+    <h1>Додати новий юніт для "{{ standard_name.name }}"</h1>
+        <p align="center">
+        <a href="/units/{{ standard_name_id }}"><img src="/static/back.png" width="3%"><br>Назад</a>
+    </p>
+    <form action="/add_unit" method="post">
+    <input type="hidden" name="standard_name_id" value="{{ standard_name_id }}">
+
+    <label for="unit">Юніт:</label>
+    <input type="text" name="unit" id="unit" required>
+
+    <label for="is_standard">Стандартний:</label>
+    <input type="checkbox" name="is_standard" id="is_standard" {% if is_standard %} checked {% endif %}>
+
+    <button type="submit">Додати</button>
+</form>
+
+
+</body>
+</html>

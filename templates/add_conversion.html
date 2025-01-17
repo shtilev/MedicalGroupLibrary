@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Додати конверсію</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <h1>Додати конверсію для стандартного імені "{{ standard_name.name }}"</h1>
+    <p align="center">
+        <a href="/conversions/{{ standard_name.id }}"><img src="/static/back.png" width="3%"><br>Назад</a>
+    </p>
+
+    <form method="post" action="/add_conversion">
+        <input type="hidden" name="standard_name_id" value="{{ standard_name.id }}">
+
+        <label for="from_unit_id">Юніт з:</label>
+        <select id="from_unit_id" name="from_unit_id" required>
+            {% for unit in units %}
+                <option value="{{ unit.id }}">{{ unit.unit }}</option>
+            {% endfor %}
+        </select><br><br>
+
+        <label for="to_unit_id">Юніт в:</label>
+        <select id="to_unit_id" name="to_unit_id" required>
+            {% for unit in units %}
+                <option value="{{ unit.id }}">{{ unit.unit }}</option>
+            {% endfor %}
+        </select><br><br>
+
+        <label for="formula">Формула конверсії (приклад: <b>x * 2</b>)</label>
+        <input type="text" id="formula" name="formula" required><br><br>
+
+        <input type="submit" value="Додати конверсію" class="btn">
+    </form>
+</body>
+</html>

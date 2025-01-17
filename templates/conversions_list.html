@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Конверсії для "{{ standard_name.name }}"</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <h1>Конверсії для стандартного імені "{{ standard_name.name }}"</h1>
+    <p align="center"><a href="/"><img src="/static/back.png" width="3%"><br>Назад</a>
+    </p><p align="center">
+    <a href="/add_conversion/{{ standard_name.id }}" style="font-size:25px;">Додати нову конверсію</a>
+        <br>
+        <a href="/test_conversion/{{ standard_name.id }}" style="font-size:25px;">Протестувати конверсію</a>
+
+    </p>
+
+
+
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Вихідна одиниця</th>
+            <th>Цільова одиниця</th>
+            <th>Формула конверсії</th>
+            <th>Дії</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for conversion in conversions %}
+            <tr>
+                <td>{{ conversion.id }}</td>
+                <td>{{ conversion.from_unit.unit }}</td>
+                <td>{{ conversion.to_unit.unit }}</td>
+                <td>{{ conversion.formula }}</td>
+                <td>
+                    <form method="post" action="/delete_conversion/{{ conversion.id }}" class="form-delete" style="display: inline;">
+                        <button type="submit" class="btn-delete">Видалити</button>
+                    </form>
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+</body>
+</html>

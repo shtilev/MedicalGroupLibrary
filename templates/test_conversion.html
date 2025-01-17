@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тест конверсії</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <h1>Тест конверсії для {{ standard_name.name }}</h1>
+    <p align="center">
+        <a href="/conversions/{{ standard_name_id }}"><img src="/static/back.png" width="3%"><br>Назад</a>
+    </p>
+
+    <form method="post" action="/test_conversion">
+        <input type="hidden" name="standard_name_id" value="{{ standard_name_id }}">
+        <label for="value">Значення:</label>
+        <input type="number" step="any" id="value" name="value" required>
+        <br>
+        <label for="from_unit">Вхідний юніт:</label>
+        <select id="from_unit" name="from_unit_id" required>
+            {% for unit in units %}
+            <option value="{{ unit.id }}">{{ unit.unit }}</option>
+            {% endfor %}
+        </select>
+
+        <button type="submit">Тестувати конверсію</button>
+
+    </form>
+
+    {% if result %}
+    <h2>Результат конверсії:</h2>
+    <div class="synonyms-container">
+    <p>Результат: {{ result.value }} ({{ result.to_unit }}) було створено з value ({{ result.from_unit }})</p>
+    <p>Вхідна одиниця: {{ result.from_unit }}</p>
+    <p>Цільова одиниця: {{ result.to_unit }}</p>
+
+    {% if result.error %}
+        <h3>Помилка: {{ result.error }}</h3>
+    {% endif %}
+    {% endif %}
+        </div>
+</body>
+</html>

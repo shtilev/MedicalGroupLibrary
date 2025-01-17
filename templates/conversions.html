@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Конверсії для стандартних імен</title>
+    <link rel="stylesheet" href="/static/styles.css">
+
+</head>
+<body>
+    <h1>Конверсії для стандартних імен</h1>
+    <p align="center"><a href="/"><img src="/static/back.png" width="3%"><br>Назад</a></p>
+    <div class="synonyms-container">
+
+        {% for standard_name in standard_names %}
+
+                <a href="/conversions/{{ standard_name.id }}" class="btn">{{ standard_name.name }}</a>
+        {% endfor %}
+    </div>
+</body>
+</html>

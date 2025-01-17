@@ -5,6 +5,7 @@ from routes.data_transfer import router as data_transfer_router
 from routes.generator import router as generator
 from medicalgrouplibrary.database import init_db
 from routes.test_unificator import router as unificator_router
+from routes.units import router as units_router
 
 # Инициализация приложения FastAPI
 app = FastAPI()
@@ -18,6 +19,7 @@ app.include_router(synonyms_router)
 app.include_router(data_transfer_router)
 app.include_router(generator)
 app.include_router(unificator_router)
+app.include_router(units_router)
 
 # Подключение статических файлов
 app.mount("/static", StaticFiles(directory="static"), name="static")
