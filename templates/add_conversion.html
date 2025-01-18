@@ -1,14 +1,11 @@
-<!DOCTYPE html>
-<html lang="uk">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Додати конверсію</title>
-    <link rel="stylesheet" href="/static/styles.css">
-</head>
-<body>
-    <h1>Додати конверсію для стандартного імені "{{ standard_name.name }}"</h1>
-    <p align="center">
+{% extends "components/base.html" %}
+
+{% block title %}Додати конверсію для "{{ standard_name.name }}"{% endblock %}
+
+{% block header %}Додати конверсію для "{{ standard_name.name }}"{% endblock %}
+
+{% block content %}
+   <p align="center">
         <a href="/conversions/{{ standard_name.id }}"><img src="/static/back.png" width="3%"><br>Назад</a>
     </p>
 
@@ -34,5 +31,4 @@
 
         <input type="submit" value="Додати конверсію" class="btn">
     </form>
-</body>
-</html>
+{% endblock %}

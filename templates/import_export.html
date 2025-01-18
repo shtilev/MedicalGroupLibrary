@@ -1,18 +1,13 @@
-<!DOCTYPE html>
-<html lang="uk">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Імпорт / Експорт Синонімів</title>
-    <link rel="stylesheet" href="/static/styles.css">
-</head>
-<body>
-    <header>
-        <h1>Імпортувати / Експортувати синоніми</h1>
+{% extends "components/base.html" %}
+
+{% block title %}Імпорт / Експорт СинонімівГоловна сторінка{% endblock %}
+
+{% block header %}Імпорт / Експорт Синонімів{% endblock %}
+
+{% block content %}
         <p align="center"><a href="/"><img src="/static/back.png" width="3%"><br>Назад</a></p>
-    </header>
-    <main>
-        <section>
+
+<section>
             <h2>Імпорт синонімів</h2>
             <form action="/import" method="post" enctype="multipart/form-data">
                 <label for="file">Виберіть JSON файл для імпорту:</label><br>
@@ -47,6 +42,4 @@
         {% if message %}
             <div style="color: green;">{{ message }}</div>
         {% endif %}
-    </main>
-</body>
-</html>
+{% endblock %}

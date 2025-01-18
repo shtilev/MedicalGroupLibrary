@@ -7,7 +7,20 @@
     <link rel="stylesheet" href="/static/styles.css">
 </head>
 <body>
-    <h1>Тест конверсії для {{ standard_name.name }}</h1>
+    <h1></h1>
+
+</body>
+</html>
+
+
+
+{% extends "components/base.html" %}
+
+{% block title %}Тест конверсії для {{ standard_name.name }}{% endblock %}
+
+{% block header %}Тест конверсії для {{ standard_name.name }}{% endblock %}
+
+{% block content %}
     <p align="center">
         <a href="/conversions/{{ standard_name_id }}"><img src="/static/back.png" width="3%"><br>Назад</a>
     </p>
@@ -31,14 +44,13 @@
     {% if result %}
     <h2>Результат конверсії:</h2>
     <div class="synonyms-container">
-    <p>Результат: {{ result.value }} ({{ result.to_unit }}) було створено з value ({{ result.from_unit }})</p>
-    <p>Вхідна одиниця: {{ result.from_unit }}</p>
-    <p>Цільова одиниця: {{ result.to_unit }}</p>
+
+        <p align="center"><h3>Результат: {{ result.value }} {{ result.to_unit }}</h3></p>
+    було стандартизовано з {{ input_value }} ({{ result.from_unit }})
 
     {% if result.error %}
         <h3>Помилка: {{ result.error }}</h3>
     {% endif %}
     {% endif %}
         </div>
-</body>
-</html>
+{% endblock %}

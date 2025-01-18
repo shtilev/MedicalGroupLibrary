@@ -1,21 +1,26 @@
-<!DOCTYPE html>
-<html lang="uk">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Конверсії для стандартних імен</title>
-    <link rel="stylesheet" href="/static/styles.css">
+{% extends "components/base.html" %}
 
-</head>
-<body>
-    <h1>Конверсії для стандартних імен</h1>
+{% block title %}Конверсії для стандартних імен{% endblock %}
+
+{% block header %}Конверсії для стандартних імен{% endblock %}
+
+{% block content %}
     <p align="center"><a href="/"><img src="/static/back.png" width="3%"><br>Назад</a></p>
+
+    <!-- Панель фільтрації -->
+    <div>
+    <div class="synonyms-container" align="center">
+            {% for letter in 'АБВГҐДЕЄЖЗИІЙКЛМНОПРСТУФХЦЧШЩЬЮЯ' %}
+                <a href="/conversions?filter_letter={{ letter }}" style="font-size:35px;">{{ letter }}</a> |
+            {% endfor %}
+        </div>
+    </div>
+
     <div class="synonyms-container">
-
         {% for standard_name in standard_names %}
-
-                <a href="/conversions/{{ standard_name.id }}" class="btn">{{ standard_name.name }}</a>
+            <a href="/conversions/{{ standard_name.id }}" class="synonyms-btn">{{ standard_name.name }}</a>
+        {% else %}
+            Немає стандартних імен для відображення.
         {% endfor %}
     </div>
-</body>
-</html>
+{% endblock %}

@@ -1,14 +1,10 @@
-<!DOCTYPE html>
-<html lang="uk">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Юніти для {{ standard_name.name }}</title>
-            <link rel="stylesheet" href="/static/styles.css">
+{% extends "components/base.html" %}
 
-</head>
-<body>
-    <h1>Юніти для "{{ standard_name.name }}"</h1>
+{% block title %}Юніти для "{{ standard_name.name }}"{% endblock %}
+
+{% block header %}Юніти для "{{ standard_name.name }}"{% endblock %}
+
+{% block content %}
         <p align="center">
         <a href="/units"><img src="/static/back.png" width="3%"><br>Назад</a>
     </p>
@@ -44,6 +40,4 @@
         {% endfor %}
     </tbody>
 </table>
-
-</body>
-</html>
+{% endblock %}

@@ -1,0 +1,32 @@
+{% extends "components/base.html" %}
+
+{% block title %}Калькулятор{% endblock %}
+
+{% block header %}Калькулятор{% endblock %}
+
+{% block content %}
+    <p align="center">
+        <a href="/"><img src="/static/back.png" width="3%"><br>Назад</a>
+    </p>
+
+
+<h2>Виберіть аналіз:</h2>
+
+<!-- Панель фільтрації -->
+<div>
+    <div class="synonyms-container" align="center">
+        {% for letter in 'АБВГҐҐДЕЄЖЗИІЙКЛМНОПРСТУФХЦЧШЩЬЮЯ' %}
+            | &nbsp; <a href="/calculator?filter_letter={{ letter }}" style="font-size:35px;">{{ letter }}</a>
+        {% endfor %}
+    </div>
+</div>
+<br>
+<!-- Відображення аналізів -->
+<div class="synonyms-container">
+    {% for standard_name in standard_names %}
+        <a href="/calculator_result/{{ standard_name.id }}">
+            <button type="button" class="synonyms-btn">{{ standard_name.name }}</button>
+        </a>
+    {% endfor %}
+</div>
+{% endblock %}

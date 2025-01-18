@@ -1,15 +1,12 @@
-<!DOCTYPE html>
-<html lang="uk">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Конверсії для "{{ standard_name.name }}"</title>
-    <link rel="stylesheet" href="/static/styles.css">
-</head>
-<body>
-    <h1>Конверсії для стандартного імені "{{ standard_name.name }}"</h1>
+{% extends "components/base.html" %}
+
+{% block title %}Конверсії для "{{ standard_name.name }}"{% endblock %}
+
+{% block header %}Конверсії для "{{ standard_name.name }}"{% endblock %}
+
+{% block content %}
     <p align="center"><a href="/"><img src="/static/back.png" width="3%"><br>Назад</a>
-    </p><p align="center">
+    <br>
     <a href="/add_conversion/{{ standard_name.id }}" style="font-size:25px;">Додати нову конверсію</a>
         <br>
         <a href="/test_conversion/{{ standard_name.id }}" style="font-size:25px;">Протестувати конверсію</a>
@@ -44,6 +41,5 @@
         {% endfor %}
     </tbody>
 </table>
+{% endblock %}
 
-</body>
-</html>

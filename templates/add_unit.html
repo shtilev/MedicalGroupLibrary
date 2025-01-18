@@ -8,7 +8,22 @@
 
 </head>
 <body>
-    <h1>Додати новий юніт для "{{ standard_name.name }}"</h1>
+    <h1></h1>
+
+
+
+</body>
+</html>
+
+
+
+{% extends "components/base.html" %}
+
+{% block title %}Додати новий юніт для "{{ standard_name.name }}"{% endblock %}
+
+{% block header %}Додати новий юніт для "{{ standard_name.name }}"{% endblock %}
+
+{% block content %}
         <p align="center">
         <a href="/units/{{ standard_name_id }}"><img src="/static/back.png" width="3%"><br>Назад</a>
     </p>
@@ -23,7 +38,4 @@
 
     <button type="submit">Додати</button>
 </form>
-
-
-</body>
-</html>
+{% endblock %}

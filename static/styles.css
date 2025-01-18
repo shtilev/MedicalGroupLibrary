@@ -295,10 +295,13 @@ ul {
 .synonyms-container {
     display: row;
     margin: 30px;
+    align: center;
 }
 
 .synonyms-btn {
     padding: 12px 30px;
+    margin-bottom: 15px;
+    margin-right: 15px;
     background-color: #007BFF;
     color: white;
     text-decoration: none;

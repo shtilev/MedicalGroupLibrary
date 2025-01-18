@@ -22,12 +22,22 @@ def get_db():
         db.close()
 
 
-
 @router.get("/units", response_class=HTMLResponse)
-async def get_all_standard_names(request: Request, db: Session = Depends(get_db)):
-    standard_names = db.query(StandardName).all()
-    return templates.TemplateResponse("units.html", {"request": request, "standard_names": standard_names})
+async def get_all_standard_names(request: Request, filter_letter: str = None, db: Session = Depends(get_db)):
+    # Отримання стандартних імен з можливістю фільтрації
+    standard_names_query = db.query(StandardName)
 
+    if filter_letter:
+        # Фільтрація за першою літерою назви
+        standard_names_query = standard_names_query.filter(StandardName.name.ilike(f"{filter_letter}%"))
+
+    standard_names = standard_names_query.all()
+
+    return templates.TemplateResponse("units.html", {
+        "request": request,
+        "standard_names": standard_names,
+        "filter_letter": filter_letter,
+    })
 
 
 @router.get("/units/{standard_name_id}", response_class=HTMLResponse)
@@ -78,12 +88,22 @@ async def add_unit_route(request: Request, standard_name_id: int = Form(...), un
     return RedirectResponse(f"/units/{standard_name_id}", status_code=302)
 
 
-# Роут для перегляду всіх стандартних імен і їх конверсій
 @router.get("/conversions", response_class=HTMLResponse)
-async def get_standard_names(request: Request, db: Session = Depends(get_db)):
-    # Отримуємо всі стандартні імена з бази даних
-    standard_names = db.query(StandardName).all()
-    return templates.TemplateResponse("conversions.html", {"request": request, "standard_names": standard_names})
+async def get_standard_names(request: Request, filter_letter: str = None, db: Session = Depends(get_db)):
+    # Отримуємо стандартні імена з можливістю фільтрації
+    standard_names_query = db.query(StandardName)
+
+    if filter_letter:
+        # Фільтрація за першою літерою назви
+        standard_names_query = standard_names_query.filter(StandardName.name.ilike(f"{filter_letter}%"))
+
+    standard_names = standard_names_query.all()
+
+    return templates.TemplateResponse("conversions.html", {
+        "request": request,
+        "standard_names": standard_names,
+        "filter_letter": filter_letter,
+    })
 
 
 @router.get("/conversions/{standard_name_id}", response_class=HTMLResponse)
@@ -162,7 +182,8 @@ async def test_conversion_route(request: Request, value: float = Form(...), from
         "standard_name_id": standard_name_id,
         "standard_name": standard_name,
         "units": units,
-        "result": result
+        "result": result,
+        "input_value": value
     })
 
 
@@ -189,3 +210,60 @@ async def delete_conversion_route(request: Request, conversion_id: int, db: Sess
     db.commit()
 
     return RedirectResponse(f"/conversions/{conversion.standard_name_id}", status_code=302)
+
+
+@router.get("/calculator", response_class=HTMLResponse)
+async def show_calculator_page(request: Request, filter_letter: str = None, db: Session = Depends(get_db)):
+    # Отримуємо всі стандартні імена
+    standard_names_query = db.query(StandardName)
+
+    if filter_letter:
+        # Фільтрація за першою літерою назви
+        standard_names_query = standard_names_query.filter(StandardName.name.ilike(f"{filter_letter}%"))
+
+    standard_names = standard_names_query.all()
+    return templates.TemplateResponse("calculator.html", {"request": request, "standard_names": standard_names,
+                                                          "filter_letter": filter_letter})
+
+
+# Роут для відображення форми конверсії для вибраного стандартного імені
+@router.get("/calculator_result/{standard_name_id}", response_class=HTMLResponse)
+async def show_conversion_form(request: Request, standard_name_id: int, db: Session = Depends(get_db)):
+
+    # Получаем стандартное имя по id
+    standard_name = db.query(StandardName).filter_by(id=standard_name_id).first()
+    if not standard_name:
+        raise HTTPException(status_code=404, detail="Стандартное имя не найдено.")
+
+    # Получаем единицы измерения для этого стандартного имени
+    units = db.query(Unit).filter_by(standard_name_id=standard_name_id).all()
+
+    # Отправляем форму с доступными единицами
+    return templates.TemplateResponse("calculator_result.html", {
+        "request": request,
+        "standard_name_id": standard_name_id,
+        "standard_name": standard_name,
+        "units": units
+    })
+
+# Роут для выполнения конверсии после отправки формы
+@router.post("/calculator_result_submit", response_class=HTMLResponse)
+async def calculate_conversion(request: Request, value: float = Form(...), from_unit_id: int = Form(...),
+                               to_unit_id: int = Form(...), standard_name_id: int = Form(...), db: Session = Depends(get_db)):
+    # Виконуємо конверсію
+    result = convert_to_standard_unit(value=value, from_unit_id=from_unit_id, standard_name_id=standard_name_id)
+
+    # Отримуємо стандартне ім'я та юніти для відображення на сторінці
+    standard_name = db.query(StandardName).filter_by(id=standard_name_id).first()
+    if not standard_name:
+        raise HTTPException(status_code=404, detail="Стандартное ім'я не знайдено.")
+    units = db.query(Unit).filter_by(standard_name_id=standard_name_id).all()
+
+    return templates.TemplateResponse("calculator_result.html", {
+        "request": request,
+        "standard_name_id": standard_name_id,
+        "standard_name": standard_name,
+        "units": units,
+        "result": result,
+        "input_value": value
+    })

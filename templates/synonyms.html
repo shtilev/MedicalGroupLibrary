@@ -1,26 +1,29 @@
-<!DOCTYPE html>
-<html lang="uk">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Синоніми для {{ standard_name }}</title>
-    <link rel="stylesheet" href="/static/styles.css">
-</head>
-<body>
-    <header>
-        <h1>Синоніми для уніфікованого імені: {{ standard_name }}</h1>
-        <p align="center"><a href="/unification_names"><img src="/static/back.png" width="3%"><br>Назад</a></p>
+{% extends "components/base.html" %}
 
+{% block title %}Синоніми для уніфікованого імені: {{ standard_name.name }}{% endblock %}
+
+{% block header %}Синоніми для уніфікованого імені: {{ standard_name.name }}{% endblock %}
+
+{% block content %}
+    <header>
+        <p align="center"><a href="/unification_names"><img src="/static/back.png" width="3%"><br>Назад</a></p>
     </header>
 
-    <main>
         <section>
             <h2>Додати новий синонім</h2>
-            <form action="/add_synonym/{{ standard_name }}" method="post">
+            <form action="/add_synonym/{{ standard_name.id }}" method="post">
                 <input type="text" name="synonym" placeholder="Синонім" required>
                 <button type="submit">Додати синонім</button>
             </form>
-        </section>
+
+    <h2>Переіменувати уніфіковане ім'я</h2>
+    <form action="/rename_standard_name/{{ standard_name.id }}" method="post">
+
+        <input type="text" name="new_standard_name" value="{{ standard_name.name }}" placeholder="Нове уніфіковане ім'я" required>
+        <button type="submit">Переіменувати</button>
+    </form>
+</section>
+
 
         <section>
             <h2>Синоніми</h2>
@@ -43,13 +46,10 @@
                             <form action="/delete/{{ synonym.id }}" method="post" class="form-delete" style="display: inline;">
                                 <button type="submit" class="btn-delete">Видалити</button>
                             </form>
-
                         </td>
                     </tr>
                     {% endfor %}
                 </tbody>
             </table>
         </section>
-    </main>
-</body>
-</html>
+{% endblock %}

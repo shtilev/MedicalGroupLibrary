@@ -20,7 +20,15 @@ print(f'get_units_for_standard_name: {wx}')
 
 # e = add_unit_conversation(2, 1, "x * 10", 1)
 
+#
+# result = convert_to_standard_unit(100, 2, 1)
+# print(result)
 
-result = convert_to_standard_unit(100, 2, 1)
-print(result)
 
+result = calculate_conversion(12.5, 'мг/мл', 'г/100мл', standard_name_id=1)
+
+if 'error' in result:
+    print(result['error'])
+else:
+    print(f"Значення: {result['value']}")
+    print("Шлях конверсії:", result['path'])

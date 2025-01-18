@@ -266,3 +266,80 @@ def convert_to_standard_unit(value: float, from_unit_id: int, standard_name_id: 
         return {"error": "Произошла ошибка во время выполнения конверсии."}
     finally:
         session.close()
+
+
+def calculate_conversion(value: float, from_unit: str, to_unit: str, standard_name_id: int):
+    """
+    Виконує конверсію значення між будь-якими двома одиницями вимірювання.
+    :param value: Початкове значення для конверсії.
+    :param from_unit: Одиниця вимірювання, з якої відбувається конверсія.
+    :param to_unit: Одиниця вимірювання, до якої потрібно конвертувати.
+    :param standard_name_id: ID стандартного імені.
+    :return: Конвертоване значення або повідомлення про помилку.
+    """
+    session = SessionLocal()
+
+    try:
+        # Отримуємо всі одиниці вимірювання для стандартного імені
+        units = session.query(Unit).filter_by(standard_name_id=standard_name_id).all()
+        if not units:
+            return {"error": "Одиниці вимірювання для заданого стандартного імені не знайдені."}
+
+        # Створюємо граф конверсій
+        conversions = session.query(UnitConversion).filter_by(standard_name_id=standard_name_id).all()
+        graph = {}
+        for conversion in conversions:
+            if conversion.from_unit_id not in graph:
+                graph[conversion.from_unit_id] = []
+            graph[conversion.from_unit_id].append((conversion.to_unit_id, conversion.formula))
+
+        # Знаходимо ID одиниць from_unit і to_unit
+        from_unit_entry = session.query(Unit).filter_by(unit=from_unit, standard_name_id=standard_name_id).first()
+        to_unit_entry = session.query(Unit).filter_by(unit=to_unit, standard_name_id=standard_name_id).first()
+
+        if not from_unit_entry or not to_unit_entry:
+            return {"error": f"Одна або обидві одиниці ('{from_unit}', '{to_unit}') не знайдені."}
+
+        from_unit_id = from_unit_entry.id
+        to_unit_id = to_unit_entry.id
+
+        # BFS для пошуку шляху між одиницями
+        from collections import deque
+
+        queue = deque([(from_unit_id, value, [])])  # (current_unit_id, current_value, path)
+        visited = set()
+
+        while queue:
+            current_unit_id, current_value, path = queue.popleft()
+
+            if current_unit_id == to_unit_id:
+                return {
+                    "value": current_value,
+                    "path": path,
+                    "from_unit": from_unit,
+                    "to_unit": to_unit,
+                }
+
+            if current_unit_id in visited:
+                continue
+
+            visited.add(current_unit_id)
+
+            for neighbor_unit_id, formula in graph.get(current_unit_id, []):
+                # Обчислюємо нове значення
+                context = {'value': current_value}
+                try:
+                    new_value = eval(formula.replace('x', 'value'), {}, context)
+                except Exception as e:
+                    return {"error": f"Помилка в обчисленні формули '{formula}': {e}"}
+
+                # Додаємо сусіда в чергу
+                queue.append((neighbor_unit_id, new_value, path + [(current_unit_id, neighbor_unit_id, formula)]))
+
+        return {"error": f"Шлях між одиницями '{from_unit}' і '{to_unit}' не знайдено."}
+
+    except Exception as e:
+        print(f"Помилка: {e}")
+        return {"error": "Сталася помилка при виконанні конверсії."}
+    finally:
+        session.close()

@@ -1,0 +1,49 @@
+{% extends "components/base.html" %}
+
+{% block title %}Конвертація для {{ standard_name.name }}{% endblock %}
+
+{% block header %}Конвертація для {{ standard_name.name }}{% endblock %}
+
+{% block content %}
+   <p align="center">
+        <a href="/calculator"><img src="/static/back.png" width="3%"><br>Назад</a>
+    </p>
+
+    <form method="POST" action="/calculator_result_submit">
+        <input type="hidden" name="standard_name_id" value="{{ standard_name_id }}">
+
+        <label for="value">Значення:</label>
+        <input type="number" step="any" id="value" name="value" required>
+        <br>
+
+        <label for="from_unit">Вхідний юніт:</label>
+        <select id="from_unit" name="from_unit_id" required>
+            {% for unit in units %}
+                <option value="{{ unit.id }}">{{ unit.unit }}</option>
+            {% endfor %}
+        </select>
+        <br>
+
+        <label for="to_unit">Цільовий юніт:</label>
+        <select id="to_unit" name="to_unit_id" required>
+            {% for unit in units %}
+                <option value="{{ unit.id }}">{{ unit.unit }}</option>
+            {% endfor %}
+        </select>
+        <br>
+
+        <button type="submit">Конвертувати</button>
+    </form>
+
+    {% if result %}
+        <h2>Результат конверсії:</h2>
+        <div class="synonyms-container" align="center">
+            <h3>Результат: {{ result.value }} {{ result.to_unit }}</h3>
+            Було конвертовано з {{ input_value }} ({{ result.from_unit }})
+
+            {% if result.error %}
+                <h3>Помилка: {{ result.error }}</h3>
+            {% endif %}
+        </div>
+    {% endif %}
+{% endblock %}
